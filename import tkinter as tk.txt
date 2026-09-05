@@ -1,0 +1,505 @@
+import tkinter as tk
+from tkinter import ttk, messagebox
+
+
+# ================= COLORS =================
+
+BG = "#080D1C"
+CARD = "#111A30"
+CARD2 = "#17223D"
+INPUT = "#1B2948"
+PURPLE = "#8B5CF6"
+CYAN = "#06B6D4"
+GREEN = "#22C55E"
+WHITE = "#F8FAFC"
+MUTED = "#94A3B8"
+BORDER = "#293858"
+
+
+# ================= CAREER DATA =================
+
+careers = {
+    "Data Scientist":
+        [90, 40, 80, 90, 85, 95, 70],
+
+    "Machine Learning Engineer":
+        [95, 40, 65, 90, 95, 100, 65],
+
+    "Data Analyst":
+        [70, 20, 95, 75, 75, 50, 85],
+
+    "Software Developer":
+        [70, 95, 60, 65, 95, 40, 70],
+
+    "Web Developer":
+        [45, 65, 50, 40, 75, 20, 80],
+
+    "Cyber Security Analyst":
+        [75, 55, 65, 65, 95, 45, 65],
+
+    "Cloud Engineer":
+        [70, 65, 60, 55, 90, 35, 70]
+}
+
+
+skills = [
+    "Python", "Java", "SQL", "Mathematics",
+    "Problem Solving", "AI/ML", "Communication"
+]
+
+levels = ["Beginner", "Intermediate", "Advanced", "Expert"]
+
+level_score = {
+    "Beginner": 25,
+    "Intermediate": 50,
+    "Advanced": 75,
+    "Expert": 100
+}
+
+interests = [
+    "Artificial Intelligence / ML",
+    "Data Science",
+    "Software Development",
+    "Web Development",
+    "Cyber Security",
+    "Cloud Computing"
+]
+
+
+# ================= WINDOW =================
+
+root = tk.Tk()
+root.title("AI Student Career Advisor")
+root.geometry("1150x760")
+root.minsize(1000, 680)
+root.configure(bg=BG)
+
+
+# ================= STYLE =================
+
+style = ttk.Style()
+style.theme_use("clam")
+
+style.configure(
+    "C.TCombobox",
+    fieldbackground=INPUT,
+    background=INPUT,
+    foreground=WHITE,
+    arrowcolor=CYAN,
+    padding=6
+)
+
+
+# ================= HEADER =================
+
+tk.Label(
+    root,
+    text="🤖  AI STUDENT CAREER ADVISOR",
+    font=("Segoe UI", 25, "bold"),
+    bg=BG,
+    fg=WHITE
+).pack(anchor="w", padx=35, pady=(20, 2))
+
+tk.Label(
+    root,
+    text="Discover the career that best matches your skills and interests",
+    font=("Segoe UI", 10),
+    bg=BG,
+    fg=MUTED
+).pack(anchor="w", padx=35)
+
+
+# ================= MAIN =================
+
+main = tk.Frame(root, bg=BG)
+main.pack(fill="both", expand=True, padx=35, pady=15)
+
+main.grid_columnconfigure(0, weight=1)
+main.grid_columnconfigure(1, weight=1)
+main.grid_rowconfigure(0, weight=1)
+
+
+# ================= LEFT PANEL =================
+
+left = tk.Frame(
+    main, bg=CARD,
+    highlightbackground=BORDER,
+    highlightthickness=1
+)
+
+left.grid(row=0, column=0, sticky="nsew", padx=(0, 8))
+
+
+tk.Label(
+    left,
+    text="👤  STUDENT PROFILE",
+    font=("Segoe UI", 16, "bold"),
+    bg=CARD,
+    fg=PURPLE
+).pack(anchor="w", padx=22, pady=(18, 2))
+
+tk.Label(
+    left,
+    text="Enter your skills and career interest",
+    font=("Segoe UI", 9),
+    bg=CARD,
+    fg=MUTED
+).pack(anchor="w", padx=22, pady=(0, 10))
+
+
+# ================= NAME =================
+
+tk.Label(
+    left,
+    text="Student Name",
+    font=("Segoe UI", 10, "bold"),
+    bg=CARD,
+    fg=WHITE
+).pack(anchor="w", padx=22)
+
+name = tk.Entry(
+    left,
+    bg=INPUT,
+    fg=WHITE,
+    insertbackground=WHITE,
+    relief="flat",
+    highlightbackground=BORDER,
+    highlightthickness=1
+)
+
+name.pack(fill="x", padx=22, pady=(5, 10), ipady=6)
+
+
+# ================= SKILLS =================
+
+tk.Label(
+    left,
+    text="⚡ SKILL LEVEL",
+    font=("Segoe UI", 11, "bold"),
+    bg=CARD,
+    fg=CYAN
+).pack(anchor="w", padx=22)
+
+
+skill_frame = tk.Frame(left, bg=CARD)
+skill_frame.pack(fill="x", padx=18, pady=5)
+
+skill_vars = {}
+
+for i, skill in enumerate(skills):
+
+    r, c = divmod(i, 2)
+
+    box = tk.Frame(
+        skill_frame,
+        bg=CARD2,
+        highlightbackground=BORDER,
+        highlightthickness=1
+    )
+
+    box.grid(
+        row=r, column=c,
+        sticky="ew",
+        padx=4, pady=4
+    )
+
+    skill_frame.columnconfigure(c, weight=1)
+
+    tk.Label(
+        box,
+        text=skill,
+        bg=CARD2,
+        fg=WHITE,
+        font=("Segoe UI", 9, "bold")
+    ).pack(anchor="w", padx=8, pady=(5, 2))
+
+    var = tk.StringVar(value="Intermediate")
+
+    ttk.Combobox(
+        box,
+        textvariable=var,
+        values=levels,
+        state="readonly",
+        style="C.TCombobox",
+        font=("Segoe UI", 9)
+    ).pack(fill="x", padx=7, pady=(0, 6))
+
+    skill_vars[skill] = var
+
+
+# ================= INTEREST =================
+
+tk.Label(
+    left,
+    text="🎯 CAREER INTEREST",
+    font=("Segoe UI", 11, "bold"),
+    bg=CARD,
+    fg=CYAN
+).pack(anchor="w", padx=22, pady=(8, 3))
+
+interest = tk.StringVar(value=interests[0])
+
+ttk.Combobox(
+    left,
+    textvariable=interest,
+    values=interests,
+    state="readonly",
+    style="C.TCombobox"
+).pack(fill="x", padx=22)
+
+
+# ================= RIGHT PANEL =================
+
+right = tk.Frame(
+    main, bg=CARD,
+    highlightbackground=BORDER,
+    highlightthickness=1
+)
+
+right.grid(row=0, column=1, sticky="nsew", padx=(8, 0))
+
+
+tk.Label(
+    right,
+    text="🎯  CAREER RECOMMENDATION",
+    font=("Segoe UI", 16, "bold"),
+    bg=CARD,
+    fg=PURPLE
+).pack(anchor="w", padx=22, pady=(18, 2))
+
+tk.Label(
+    right,
+    text="AI-powered analysis based on your profile",
+    font=("Segoe UI", 9),
+    bg=CARD,
+    fg=MUTED
+).pack(anchor="w", padx=22)
+
+
+# ================= BEST MATCH =================
+
+best = tk.Frame(
+    right, bg=CARD2,
+    highlightbackground=BORDER,
+    highlightthickness=1
+)
+
+best.pack(fill="x", padx=22, pady=15)
+
+
+tk.Label(
+    best,
+    text="🏆 YOUR BEST MATCH CAREER",
+    font=("Segoe UI", 10, "bold"),
+    bg=CARD2,
+    fg=MUTED
+).pack(pady=(12, 3))
+
+career_label = tk.Label(
+    best,
+    text="READY TO ANALYZE",
+    font=("Segoe UI", 19, "bold"),
+    bg=CARD2,
+    fg=CYAN,
+    wraplength=400
+)
+
+career_label.pack(pady=3)
+
+
+score_label = tk.Label(
+    best,
+    text="-- %",
+    font=("Segoe UI", 22, "bold"),
+    bg=CARD2,
+    fg=GREEN
+)
+
+score_label.pack(pady=(5, 12))
+
+
+# ================= TOP MATCHES =================
+
+tk.Label(
+    right,
+    text="🏅 TOP CAREER MATCHES",
+    font=("Segoe UI", 11, "bold"),
+    bg=CARD,
+    fg=CYAN
+).pack(anchor="w", padx=22)
+
+
+ranking = tk.Label(
+    right,
+    text="Analyze your profile to see\ncareer recommendations.",
+    font=("Segoe UI", 10),
+    bg=CARD,
+    fg=WHITE,
+    justify="left"
+)
+
+ranking.pack(
+    fill="both",
+    expand=True,
+    anchor="nw",
+    padx=22,
+    pady=10
+)
+
+
+# ================= WHY CAREER =================
+
+tk.Label(
+    right,
+    text="💡 WHY THIS CAREER?",
+    font=("Segoe UI", 11, "bold"),
+    bg=CARD,
+    fg=GREEN
+).pack(anchor="w", padx=22)
+
+
+reason = tk.Label(
+    right,
+    text="Complete the analysis to see your strengths.",
+    font=("Segoe UI", 9),
+    bg=CARD,
+    fg=MUTED,
+    justify="left"
+)
+
+reason.pack(anchor="w", padx=22, pady=(5, 15))
+
+
+# ================= ANALYZE =================
+
+def analyze():
+
+    student = [
+        level_score[skill_vars[s].get()]
+        for s in skills
+    ]
+
+    selected_interest = interest.get()
+
+    results = []
+
+    for career, required in careers.items():
+
+        score = sum(
+            100 - abs(a - b)
+            for a, b in zip(student, required)
+        ) / len(skills)
+
+        # Interest bonus
+        bonus = 0
+
+        if selected_interest == "Artificial Intelligence / ML" and \
+                career in ["Machine Learning Engineer", "Data Scientist"]:
+            bonus = 8
+
+        elif selected_interest == "Data Science" and \
+                career in ["Data Scientist", "Data Analyst"]:
+            bonus = 8
+
+        elif selected_interest == "Software Development" and \
+                career == "Software Developer":
+            bonus = 8
+
+        elif selected_interest == "Web Development" and \
+                career == "Web Developer":
+            bonus = 8
+
+        elif selected_interest == "Cyber Security" and \
+                career == "Cyber Security Analyst":
+            bonus = 8
+
+        elif selected_interest == "Cloud Computing" and \
+                career == "Cloud Engineer":
+            bonus = 8
+
+        final = min(
+            100,
+            round(score * .90 + bonus, 2)
+        )
+
+        results.append((career, final))
+
+    results.sort(
+        key=lambda x: x[1],
+        reverse=True
+    )
+
+    # Best career
+    career_label.config(
+        text=results[0][0]
+    )
+
+    score_label.config(
+        text=f"{results[0][1]}%"
+    )
+
+    # Top 5
+    text = ""
+
+    for i, (career, score) in enumerate(
+        results[:5], 1
+    ):
+        text += f"{i}.  {career}\n"
+        text += f"     Match Score: {score}%\n\n"
+
+    ranking.config(text=text)
+
+    # Strengths
+    strengths = []
+
+    for skill, value in zip(skills, student):
+
+        if value >= 75:
+            strengths.append(
+                f"✓ Strong {skill}"
+            )
+
+    if not strengths:
+        strengths.append(
+            "✓ Keep improving your technical skills"
+        )
+
+    reason.config(
+        text="\n".join(strengths[:4]),
+        fg=WHITE
+    )
+
+
+# ================= BUTTON =================
+
+tk.Button(
+    left,
+    text="🔍  ANALYZE MY CAREER",
+    command=analyze,
+    font=("Segoe UI", 11, "bold"),
+    bg=PURPLE,
+    fg=WHITE,
+    activebackground="#6D28D9",
+    activeforeground=WHITE,
+    relief="flat",
+    cursor="hand2",
+    pady=11
+).pack(
+    fill="x",
+    padx=22,
+    pady=15
+)
+
+
+# ================= FOOTER =================
+
+tk.Label(
+    root,
+    text="💡 AI Student Career Advisor  •  Python + Tkinter",
+    font=("Segoe UI", 9),
+    bg=BG,
+    fg=MUTED
+).pack(pady=(0, 10))
+
+
+root.mainloop()
